@@ -3,9 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/style.css">
   <title>Document</title>
 </head>
 <body>
-  
+  <div class="container">
+    <div class="header">
+      <img src="resources/my_unsplash_logo.svg" alt="app logo">
+      <div class="input-container">
+        <img src="resources/search_FILL0_wght400_GRAD0_opsz24.svg" class="search-icon"> 
+        <input type="text" name="label" id="label-input" placeholder="Search by name">
+      </div>
+      <input type="button" value="Add a photo" class="add-button button">
+    </div>
+
+    <div class="gallery"></div>
+
+    <!-- photo adding form: -->
+    <div class="add-form">
+        <p>Add a new photo</p>
+        <div class="label-container">
+          <label for="label">Label</label>
+          <input type="text" name="label" id="label" placeholder="Enter photo label">
+        </div>
+        <div class="url-container">
+          <label for="url">Photo URL</label>
+          <input type="text" name="url" id="url" placeholder="Enter photo url">
+        </div>
+        <div class="buttons-container">
+          <input type="button" value="Submit" class="button">
+          <input type="button" value="Cancel" class="button">
+        </div>
+    </div>
+  </div>
+  <script src="scripts/script.js"></script>
 </body>
 </html>
