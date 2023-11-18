@@ -1,11 +1,21 @@
-const addPhotoButton = document.querySelector(".add-button");
-const addPhotoForm = document.querySelector(".add-form");
-const cancelPhotoAddingBtn = document.querySelector("input[value='Cancel']");
+import { View } from "./view.js";
+import { Controller } from "./controller.js";
 
-addPhotoButton.addEventListener("click", () => {
-    addPhotoForm.style.display = "flex";
-})
+const addFormElement = document.querySelector('.add-form');
+const labelInput = document.querySelector('#label');
+const urlInput = document.querySelector('#url');
 
-cancelPhotoAddingBtn.addEventListener("click", () => {
-    addPhotoForm.style.display = "none";
-})
+const view = new View();
+const controller = new Controller();
+
+view.initialise();
+
+const inputData = controller.getAddInputData(addFormElement, labelInput, urlInput);
+
+if (controller.isInputEmpty(inputData)) {
+    view.renderError("Fill in all fields!");
+} else if (!(controller.isUrlValid(inputData.url))) {
+    view.renderError("Please enter a valid URL!");
+} else {
+    controller.sendDataToServer();
+}
