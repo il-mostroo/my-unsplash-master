@@ -1,24 +1,47 @@
+import { View } from "./view.js";
+
 export class Controller {
-   
+
+    constructor() {
+        this.view = new View();
+    }
+
     getAddInputData(addFormElement, labelInput, urlInput) {
-        addFormElement.addEventListener("submit", () => {
+        addFormElement.addEventListener("submit", (event) => {
+            event.preventDefault();
             const label = labelInput.value;
             const url = urlInput.value;
             let inputData = {label, url};
-            return inputData;
+            this.isInputEmpty(inputData);
         });
     }
 
-    isInputEmpty({label, url}) {
-        if (label.trim() === "" || url.trim() === "") {
-            return true;
+    isInputEmpty(inputData) {
+        if (inputData.label.trim() === "" || inputData.url.trim() === "") {
+            this.view.renderError("Fill in all fields!");
         } else {
-            return false;
+            this.isUrlValid(inputData);
         }
     }
 
-    isUrlValid(url) {
+    isUrlValid(inputData) {
         const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-        return urlRegex.test(url);
-      }
+        if (!urlRegex.test(inputData.url)) {
+            this.view.renderError("Please enter a valid URL!");
+        } else {
+            this.sendDataToServer(inputData);
+        }
+    }
+
+    async sendDataToServer(inputData) {
+        const jsonData = JSON.stringify(inputData);
+
+        const response = await fetch("/my-unsplash-master/includes/controller.php", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonData
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 }
