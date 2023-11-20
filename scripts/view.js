@@ -44,7 +44,7 @@ export class View {
         if (this.columnCount === 1) this.column1.appendChild(imageContainer);
         else if (this.columnCount === 2) this.column2.appendChild(imageContainer);
         else if (this.columnCount === 3) this.column3.appendChild(imageContainer);
-        
+
         if(this.columnCount === 3) {
             this.columnCount = 1;
         } else {
@@ -62,7 +62,7 @@ export class View {
         imageContainer.appendChild(labelElement);
     
         const deleteButton = document.createElement("input");
-        deleteButton.classList.add("delete-button");
+        deleteButton.classList.add("delete-button", "button");
         deleteButton.type = "button";
         deleteButton.value = "Delete";
         imageContainer.appendChild(deleteButton);
@@ -76,14 +76,26 @@ export class View {
     }
 
     addHoverEffect(imageElement, labelElement, deleteButton) {
-        imageElement.addEventListener("mouseover", () => {
+        imageElement.addEventListener("mouseenter", () => {
             labelElement.classList.add("show");
             deleteButton.classList.add("show");
         })
 
-        imageElement.addEventListener("mouseout", () => {
-            labelElement.classList.remove("show");
-            deleteButton.classList.remove("show");
+        imageElement.addEventListener("mouseleave", (event) => {
+            if(!this.isMouseOverElement(event, deleteButton) && !this.isMouseOverElement(event, labelElement)) {
+                labelElement.classList.remove("show");
+                deleteButton.classList.remove("show");
+            }
         })
+    }
+
+    isMouseOverElement(event, element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom
+        );
     }
 }

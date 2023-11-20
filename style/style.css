@@ -186,10 +186,6 @@ input[value="Cancel"] {
     max-width: 100%;
 }
 
-.image-item:hover {
-    cursor: pointer;
-}
-
 .image-label {
     display: none;
     position: absolute;
