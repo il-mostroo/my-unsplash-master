@@ -85,7 +85,6 @@ body {
 .gallery {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
     gap: 2.875rem;
 }
 
@@ -169,12 +168,46 @@ input[value="Cancel"] {
     bottom: 3.125rem;
   }
 
-  .image-container {
-    border-radius: 1.5rem;
-    background-color: cadetblue;
-  }
+.image-container {
+    position: relative;
+}
 
-  .image-item {
-    width: 100%;
-    height: auto;
-  }
+.image-item {
+    border-radius: 1.5rem;
+    max-width: 100%;
+}
+
+.image-item:hover {
+    cursor: pointer;
+}
+
+.image-label {
+    display: none;
+    position: absolute;
+    left: 1.5rem;
+    bottom: 30px;
+    font-family: var(--montserrat);
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    color: white;
+}
+
+.delete-button {
+    display: none;
+    background-color: transparent;
+    font-family: var(--montserrat);
+    font-weight: 500;
+    font-size: 0.625rem;
+    color: hsla(0, 79%, 63%, 1);
+    padding: 5px 15px;
+    border: 0.0625rem solid hsla(0, 79%, 63%, 1);
+    border-radius: 2.375rem;
+    position: absolute;
+    top: 18px;
+    right: 18px;
+}
+
+.show {
+    display: block;
+}
