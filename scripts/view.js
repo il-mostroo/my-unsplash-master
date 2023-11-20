@@ -6,6 +6,10 @@ export class View {
     gallery = document.querySelector(".gallery");
     labelInput = document.querySelector("#label");
     urlInput = document.querySelector("#url");
+    column1 = document.querySelector(".column1");
+    column2 = document.querySelector(".column2");
+    column3 = document.querySelector(".column3");
+    columnCount = 1;
 
     initialise() {
         this.addEventListeners();
@@ -36,7 +40,16 @@ export class View {
     renderImage(imageData) {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("image-container");
-        this.gallery.appendChild(imageContainer);
+
+        if (this.columnCount === 1) this.column1.appendChild(imageContainer);
+        else if (this.columnCount === 2) this.column2.appendChild(imageContainer);
+        else if (this.columnCount === 3) this.column3.appendChild(imageContainer);
+        
+        if(this.columnCount === 3) {
+            this.columnCount = 1;
+        } else {
+            this.columnCount++;
+        }
     
         const imageElement = document.createElement("img");
         imageElement.classList.add("image-item");
@@ -58,7 +71,7 @@ export class View {
         addPhotoForm.style.display = "none";
         this.labelInput.value = "";
         this.urlInput.value = "";
-        
+
         this.addHoverEffect(imageElement, labelElement, deleteButton);
     }
 

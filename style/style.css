@@ -83,9 +83,18 @@ body {
 }
 
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.875rem;
+    display: flex;
+}
+
+.column1, .column2, .column3 {
+    display: flex;
+    width: 23.9375rem;
+    flex-direction: column;
+    row-gap: 1.5rem;
+}
+
+.column1, .column2 {
+    margin-right: 1.5rem;
 }
 
 /* style for photo adding form: */
