@@ -42,6 +42,10 @@ export class Controller {
             body: jsonData
         });
         const data = await response.json();
-        console.log(data);
+        if (data.message) {
+            this.view.renderError(data.message);
+        } else {
+            this.view.renderImage(data);
+        }
     }
 }
