@@ -8,10 +8,6 @@ export class View {
     labelInput = document.querySelector("#label");
     urlInput = document.querySelector("#url");
     deletePhotoForm = document.querySelector(".delete-form");
-    column1 = document.querySelector(".column1");
-    column2 = document.querySelector(".column2");
-    column3 = document.querySelector(".column3");
-    columnIndex = 1;
 
     initialise() {
         this.addEventListeners();
@@ -43,47 +39,41 @@ export class View {
           }, 3000);          
     }
 
-    renderImages(imagesData) {
-        
+    createImageContainer(imageData) {
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("image-container");
+
+        const imageElement = document.createElement("img");
+        imageElement.classList.add("image-item");
+        imageElement.src = imageData.url;
+        imageContainer.appendChild(imageElement);
+    
+        const labelElement = document.createElement("p");
+        labelElement.classList.add("image-label");
+        labelElement.textContent = imageData.label;
+        imageContainer.appendChild(labelElement);
+    
+        const deleteButton = document.createElement("input");
+        deleteButton.classList.add("delete-button", "button");
+        deleteButton.type = "button";
+        deleteButton.value = "Delete";
+        deleteButton.addEventListener("click", () => {
+            this.deletePhotoForm.style.display = "flex";
+        })
+        imageContainer.appendChild(deleteButton);
+        this.gallery.appendChild(imageContainer);
+
+        this.addHoverEffect(imageElement, labelElement, deleteButton);
+    }
+
+    renderStoredImages(imagesData) {
         imagesData.forEach(imageData => {
-            const imageContainer = document.createElement("div");
-            imageContainer.classList.add("image-container");
-
-            const imageElement = document.createElement("img");
-            imageElement.classList.add("image-item");
-            imageElement.src = imageData.url;
-            imageContainer.appendChild(imageElement);
-        
-            const labelElement = document.createElement("p");
-            labelElement.classList.add("image-label");
-            labelElement.textContent = imageData.label;
-            imageContainer.appendChild(labelElement);
-        
-            const deleteButton = document.createElement("input");
-            deleteButton.classList.add("delete-button", "button");
-            deleteButton.type = "button";
-            deleteButton.value = "Delete";
-            imageContainer.appendChild(deleteButton);
-            
-            deleteButton.addEventListener("click", () => {
-                this.deletePhotoForm.style.display = "flex";
-            })
-            let dynamicColumnName = "column";
-
-            if (this.columnIndex > 3) {
-                this.columnIndex = 1
-            } 
-            
-            dynamicColumnName += this.columnIndex;
-            
-            const columnTofill = document.querySelector("." + dynamicColumnName);
-            
-            columnTofill.appendChild(imageContainer);
-            
-            this.columnIndex++;
-
-            this.addHoverEffect(imageElement, labelElement, deleteButton);
+           this.createImageContainer(imageData);
         });
+    }
+
+    renderAddedImage(imageData) {
+        this.createImageContainer(imageData);
     }
 
     addHoverEffect(imageElement, labelElement, deleteButton) {

@@ -9,11 +9,11 @@ export class Controller {
     }
 
     initialise(addFormElement, labelInput, urlInput) {
-        this.renderStoredImages();
+        this.getStoredImages();
         this.getAddInputData(addFormElement, labelInput, urlInput);
     }
 
-    async renderStoredImages() {
+    async getStoredImages() {
         document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch('/my-unsplash-master/includes/getStoredImages.php');
             if (response.status === 400) {
@@ -21,7 +21,7 @@ export class Controller {
                 console.log("error uploading the images");
             } else {
                 const imagesData = await response.json();
-                this.view.renderImages(imagesData);
+                this.view.renderStoredImages(imagesData);
             }
         });
     }
@@ -65,7 +65,7 @@ export class Controller {
         if (data.message) {
             this.view.renderError(data.message);
         } else {
-            this.view.renderImages(data);
+            this.view.renderAddedImage(data);
             this.addPhotoForm.style.display = "none";
         }
     }
