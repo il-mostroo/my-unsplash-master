@@ -21,9 +21,4 @@ function insertImageData($imageData) {
         $stmt->execute();
 }
 
-function getStoredImages() {
-        $query = "SELECT label, imageUrl FROM images";
-        $stmt = connect()->query($query);
-        $imagesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $imagesData;
-}
+

@@ -9,21 +9,22 @@ export class Controller {
     }
 
     initialise(addFormElement, labelInput, urlInput) {
-        // const storedImagesData = this.getStoredImages();
-        // this.view.renderImages(storedImagesData);
+        this.renderStoredImages();
         this.getAddInputData(addFormElement, labelInput, urlInput);
     }
 
-    // getStoredImages() {
-    //     document.addEventListener('DOMContentLoaded', () => {
-    //         fetch('path/to/your/php/script.php')
-    //             .then(response => response.json())
-    //             .then(images => {
-    //                 return images;
-    //             })
-    //             .catch(error => console.error('Error fetching images:', error));
-    //     });
-    // }
+    async renderStoredImages() {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/my-unsplash-master/includes/getStoredImages.php');
+            if (response.status === 400) {
+                window.location.href = "/my-unsplash-master/index.html"
+                console.log("error uploading the images");
+            } else {
+                const imagesData = await response.json();
+                this.view.renderImages(imagesData);
+            }
+        });
+    }
 
     getAddInputData(addFormElement, labelInput, urlInput) {
         addFormElement.addEventListener("submit", (event) => {

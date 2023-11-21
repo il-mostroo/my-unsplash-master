@@ -82,3 +82,4 @@ function isUrlValid($imageData) {
         return false;
     }
 } 
+

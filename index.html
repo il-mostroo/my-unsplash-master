@@ -37,8 +37,21 @@
         </div>
         <div class="buttons-container">
           <input type="submit" value="Submit" class="button">
-          <input type="button" value="Cancel" class="button">
+          <input type="button" value="Cancel" class="button cancel-adding">
         </div>
+    </form>
+
+    <!-- Delete photo form -->
+    <form class="delete-form">
+      <p>Are you sure?</p>
+      <div class="password-container">
+        <label for="password">Password</label>
+        <input type="text" name="password" id="password" placeholder="Enter password">
+      </div>
+      <div class="buttons-container">
+        <input type="button" value="Delete" class="button">
+        <input type="button" value="Cancel" class="button cancel-deleting">
+      </div>
     </form>
   </div>
   <script type="module" src="scripts/script.js"></script>
