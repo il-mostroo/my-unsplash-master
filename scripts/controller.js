@@ -2,9 +2,28 @@ import { View } from "./view.js";
 
 export class Controller {
 
+    addPhotoForm = document.querySelector(".add-form");
+
     constructor() {
         this.view = new View();
     }
+
+    initialise(addFormElement, labelInput, urlInput) {
+        // const storedImagesData = this.getStoredImages();
+        // this.view.renderImages(storedImagesData);
+        this.getAddInputData(addFormElement, labelInput, urlInput);
+    }
+
+    // getStoredImages() {
+    //     document.addEventListener('DOMContentLoaded', () => {
+    //         fetch('path/to/your/php/script.php')
+    //             .then(response => response.json())
+    //             .then(images => {
+    //                 return images;
+    //             })
+    //             .catch(error => console.error('Error fetching images:', error));
+    //     });
+    // }
 
     getAddInputData(addFormElement, labelInput, urlInput) {
         addFormElement.addEventListener("submit", (event) => {
@@ -45,7 +64,8 @@ export class Controller {
         if (data.message) {
             this.view.renderError(data.message);
         } else {
-            this.view.renderImage(data);
+            this.view.renderImages(data);
+            this.addPhotoForm.style.display = "none";
         }
     }
 }

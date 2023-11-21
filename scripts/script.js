@@ -9,4 +9,4 @@ const view = new View();
 const controller = new Controller();
 
 view.initialise();
-controller.getAddInputData(addFormElement, labelInput, urlInput);
+controller.initialise(addFormElement, labelInput, urlInput);

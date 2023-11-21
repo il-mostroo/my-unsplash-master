@@ -9,7 +9,7 @@ export class View {
     column1 = document.querySelector(".column1");
     column2 = document.querySelector(".column2");
     column3 = document.querySelector(".column3");
-    columnCount = 1;
+    columnIndex = 1;
 
     initialise() {
         this.addEventListeners();
@@ -37,42 +37,44 @@ export class View {
           }, 3000);          
     }
 
-    renderImage(imageData) {
-        const imageContainer = document.createElement("div");
-        imageContainer.classList.add("image-container");
+    renderImages(imagesData) {
+        
+        imagesData.forEach(imageData => {
+            const imageContainer = document.createElement("div");
+            imageContainer.classList.add("image-container");
 
-        if (this.columnCount === 1) this.column1.appendChild(imageContainer);
-        else if (this.columnCount === 2) this.column2.appendChild(imageContainer);
-        else if (this.columnCount === 3) this.column3.appendChild(imageContainer);
+            const imageElement = document.createElement("img");
+            imageElement.classList.add("image-item");
+            imageElement.src = imageData.url;
+            imageContainer.appendChild(imageElement);
+        
+            const labelElement = document.createElement("p");
+            labelElement.classList.add("image-label");
+            labelElement.textContent = imageData.label;
+            imageContainer.appendChild(labelElement);
+        
+            const deleteButton = document.createElement("input");
+            deleteButton.classList.add("delete-button", "button");
+            deleteButton.type = "button";
+            deleteButton.value = "Delete";
+            imageContainer.appendChild(deleteButton);
+            
+            let dynamicColumnName = "column";
 
-        if(this.columnCount === 3) {
-            this.columnCount = 1;
-        } else {
-            this.columnCount++;
-        }
-    
-        const imageElement = document.createElement("img");
-        imageElement.classList.add("image-item");
-        imageElement.src = imageData.url;
-        imageContainer.appendChild(imageElement);
-    
-        const labelElement = document.createElement("p");
-        labelElement.classList.add("image-label");
-        labelElement.textContent = imageData.label;
-        imageContainer.appendChild(labelElement);
-    
-        const deleteButton = document.createElement("input");
-        deleteButton.classList.add("delete-button", "button");
-        deleteButton.type = "button";
-        deleteButton.value = "Delete";
-        imageContainer.appendChild(deleteButton);
-    
-        const addPhotoForm = document.querySelector(".add-form");
-        addPhotoForm.style.display = "none";
-        this.labelInput.value = "";
-        this.urlInput.value = "";
+            if (this.columnIndex > 3) {
+                this.columnIndex = 1
+            } 
+            
+            dynamicColumnName += this.columnIndex;
+            
+            const columnTofill = document.querySelector("." + dynamicColumnName);
+            
+            columnTofill.appendChild(imageContainer);
+            
+            this.columnIndex++;
 
-        this.addHoverEffect(imageElement, labelElement, deleteButton);
+            this.addHoverEffect(imageElement, labelElement, deleteButton);
+        });
     }
 
     addHoverEffect(imageElement, labelElement, deleteButton) {

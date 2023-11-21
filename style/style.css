@@ -25,6 +25,7 @@ body {
     border-radius: 1.5rem;
     background-color: hsla(0, 0%, 100%, 1);
     padding: 2rem 6.25rem 0 6.25rem;
+    position: relative;
 }
 
 .header {
@@ -107,6 +108,9 @@ body {
     height: 367.205px;
     border-radius: 12px;
     background: #FFF;
+    position: absolute;
+    top: 200px;
+    left: calc(50% - 310px);
 }
 
 .add-form > p {

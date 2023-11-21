@@ -53,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     http_response_code(200);
-    $response = $imageData;
-    echo json_encode($imageData);
+    $response = [$imageData];
+    echo json_encode($response);
     
 } else {
     $response = ["message" => "Invalid request method"];
