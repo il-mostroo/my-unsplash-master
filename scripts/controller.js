@@ -13,7 +13,8 @@ export class Controller {
               const imagesData = await response.json();
               return imagesData;
             } else {
-              location.reload();
+                console.log("image deleted successfully")
+                // location.reload();
           }
       }
 
@@ -55,7 +56,7 @@ export class Controller {
         return data;
     }
 
-    async addPhoto(addFormElement, labelInput, urlInput, gallery) {
+    async handlePhotoAdding(addFormElement, labelInput, urlInput, gallery) {
 
         addFormElement.addEventListener("submit", async (event) => {
             event.preventDefault();
@@ -81,5 +82,52 @@ export class Controller {
                 addFormElement.style.display = "none";
             }
         });
+    }
+
+    getUrlToDrop() {
+        const images = document.querySelectorAll("img");
+        images.forEach(image => {
+            if (image.classList.contains("clicked")) {
+                return image.src;
+            }
+        })
+    }
+
+    async deleteImage(urlToDrop) {
+        const jsonData = JSON.stringify(urlToDrop);
+
+        const response = await fetch("/my-unsplash-master/includes/dropImage.php", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonData
+        });
+        if (!response.ok) {
+            this.view.renderError("Error uplaoding the image, please try again!");
+        } else {
+            location.reload();
+        }
+    }
+
+    handlePhotoDeleting(deletePhotoForm, passwordInput) {
+        deletePhotoForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const password = passwordInput.value;
+            if (password.trim() === "") {
+                this.view.renderError("Please fill in the password!");
+            } else if (!(password === "password")) {
+                this.view.renderError("Password incorrect, please try again!");
+                passwordInput.value = "";
+            } else {
+                const images = document.querySelectorAll("img");
+                let urlToDrop = "";
+                for (const image of images) {
+                    if (image.classList.contains("clicked")) {
+                        urlToDrop = image.src;
+                        break;
+                    }
+                }
+                this.deleteImage(urlToDrop);
+            }
+        })
     }
 }

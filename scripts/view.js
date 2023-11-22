@@ -62,11 +62,24 @@ export class View {
         deleteButton.value = "Delete";
         deleteButton.addEventListener("click", () => {
             deletePhotoForm.style.display = "flex";
+            this.trackImageToDelete(deleteButton);
         })
         imageContainer.appendChild(deleteButton);
         
         this.addHoverEffect(imageElement, labelElement, deleteButton);
         return imageContainer;
+    }
+
+    trackImageToDelete(clickedDeleteButton) {
+        const imageContainer = clickedDeleteButton.closest(".image-container");
+        const imageToDelete = imageContainer.querySelector("img");
+        const images = document.querySelectorAll("img");
+        images.forEach(image => {
+            if (image.classList.contains("clicked")) {
+                image.classList.remove("clicked");
+            }
+        })
+        imageToDelete.classList.add("clicked");
     }
 
     renderImages(imagesData, gallery) {
