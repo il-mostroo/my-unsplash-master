@@ -1,17 +1,10 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "mariadbpassword";
-$dbname = "gallery";
+require_once "dbh.php";
 
 try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     $query = "SELECT label, url FROM images";
-    $stmt = $pdo->query($query);
+    $stmt = connect()->query($query);
 
     $imagesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

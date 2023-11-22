@@ -1,19 +1,12 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "mariadbpassword";
-$dbname = "gallery";
+require_once "dbh.php";
 
 try {
     $urlToDrop = json_decode(file_get_contents("php://input"));
 
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     $query = "DELETE FROM images WHERE url = :url";
-    $stmt = $pdo->prepare($query);
+    $stmt = connect()->prepare($query);
     $stmt->bindParam(':url', $urlToDrop, PDO::PARAM_STR);
     $stmt->execute();
 
