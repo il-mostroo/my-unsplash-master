@@ -13,8 +13,7 @@ export class Controller {
               const imagesData = await response.json();
               return imagesData;
             } else {
-                console.log("image deleted successfully")
-                // location.reload();
+                location.reload();
           }
       }
 
@@ -127,6 +126,35 @@ export class Controller {
                     }
                 }
                 this.deleteImage(urlToDrop);
+            }
+        })
+    }
+   
+    renderImagesByFilter(filterInput, gallery) {
+        
+        const allImages = [];
+        filterInput.addEventListener("input", (event) => {
+            const filter = event.target.value;
+            const imageContainers = document.querySelectorAll(".image-container");
+            if (allImages.length === 0) {
+                for (let imageContainer of imageContainers) {
+                    const label = imageContainer.lastElementChild.textContent;
+                    const url = imageContainer.firstElementChild.src;
+                    allImages.push({label, url});
+            }
+            }
+            const filteredImages = [];
+            allImages.forEach(image => {
+                if (image.label === filter) {
+                    filteredImages.push(image);
+                }
+            })
+            if (filteredImages.length > 0) {
+                gallery.replaceChildren();
+                this.view.renderImages(filteredImages, gallery);
+            } else {
+                gallery.replaceChildren();
+                this.view.renderImages(allImages, gallery);
             }
         })
     }

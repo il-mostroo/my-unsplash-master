@@ -49,13 +49,9 @@ export class View {
         imageElement.src = imageData.url;
         imageContainer.appendChild(imageElement);
         
-        const labelElement = document.createElement("p");
-        labelElement.classList.add("image-label");
-        labelElement.textContent = imageData.label;
-        imageContainer.appendChild(labelElement);
         
         const deletePhotoForm = document.querySelector(".delete-form");
-
+        
         const deleteButton = document.createElement("input");
         deleteButton.classList.add("delete-button", "button");
         deleteButton.type = "button";
@@ -65,6 +61,11 @@ export class View {
             this.trackImageToDelete(deleteButton);
         })
         imageContainer.appendChild(deleteButton);
+
+        const labelElement = document.createElement("p");
+        labelElement.classList.add("image-label");
+        labelElement.textContent = imageData.label;
+        imageContainer.appendChild(labelElement);
         
         this.addHoverEffect(imageElement, labelElement, deleteButton);
         return imageContainer;
