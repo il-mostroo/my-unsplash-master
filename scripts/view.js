@@ -1,20 +1,21 @@
 export class View {
-   
-    addPhotoButton = document.querySelector(".add-button");
-    addPhotoForm = document.querySelector(".add-form");
-    cancelPhotoAddingBtn = document.querySelector(".cancel-adding");
-    cancelPhotoDeletingBtn = document.querySelector(".cancel-deleting");
-    gallery = document.querySelector(".gallery");
-    labelInput = document.querySelector("#label");
-    urlInput = document.querySelector("#url");
-    deletePhotoForm = document.querySelector(".delete-form");
 
     initialise() {
+        this.selectHtmlElements();
         this.addEventListeners();
+    }
+    
+    selectHtmlElements() {
+        this.addPhotoButton = document.querySelector(".add-button");
+        this.addPhotoForm = document.querySelector(".add-form");
+        this.cancelPhotoAddingBtn = document.querySelector(".cancel-adding");
+        this.cancelPhotoDeletingBtn = document.querySelector(".cancel-deleting");
+        this.deletePhotoForm = document.querySelector(".delete-form");
     }
 
     addEventListeners() {
         this.addPhotoButton.addEventListener("click", () => {
+            console.log(this)
             this.addPhotoForm.style.display = "flex";
         })
         
@@ -42,38 +43,42 @@ export class View {
     createImageContainer(imageData) {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("image-container");
-
+        
         const imageElement = document.createElement("img");
         imageElement.classList.add("image-item");
         imageElement.src = imageData.url;
         imageContainer.appendChild(imageElement);
-    
+        
         const labelElement = document.createElement("p");
         labelElement.classList.add("image-label");
         labelElement.textContent = imageData.label;
         imageContainer.appendChild(labelElement);
-    
+        
+        const deletePhotoForm = document.querySelector(".delete-form");
+
         const deleteButton = document.createElement("input");
         deleteButton.classList.add("delete-button", "button");
         deleteButton.type = "button";
         deleteButton.value = "Delete";
         deleteButton.addEventListener("click", () => {
-            this.deletePhotoForm.style.display = "flex";
+            deletePhotoForm.style.display = "flex";
         })
         imageContainer.appendChild(deleteButton);
-        this.gallery.appendChild(imageContainer);
-
+        
         this.addHoverEffect(imageElement, labelElement, deleteButton);
+        return imageContainer;
     }
 
-    renderStoredImages(imagesData) {
+    renderImages(imagesData, gallery) {
         imagesData.forEach(imageData => {
-           this.createImageContainer(imageData);
+           const imageContainer = this.createImageContainer(imageData);
+           gallery.appendChild(imageContainer);
         });
     }
 
-    renderAddedImage(imageData) {
-        this.createImageContainer(imageData);
+    renderAddedImage(imageData, gallery) {
+        const imageContainer = this.createImageContainer(imageData[0]);
+        gallery.insertBefore(imageContainer, gallery.firstChild);
     }
 
     addHoverEffect(imageElement, labelElement, deleteButton) {

@@ -1,55 +1,45 @@
 import { View } from "./view.js";
 
 export class Controller {
-
-    addPhotoForm = document.querySelector(".add-form");
-
-    constructor() {
+    
+    initialise(gallery) {
         this.view = new View();
-    }
-
-    initialise(addFormElement, labelInput, urlInput) {
-        this.getStoredImages();
-        this.getAddInputData(addFormElement, labelInput, urlInput);
+        this.renderStoredImages(gallery);
     }
 
     async getStoredImages() {
-        document.addEventListener('DOMContentLoaded', async () => {
-            const response = await fetch('/my-unsplash-master/includes/getStoredImages.php');
-            if (response.status === 400) {
-                window.location.href = "/my-unsplash-master/index.html"
-                console.log("error uploading the images");
+          const response = await fetch('/my-unsplash-master/includes/getStoredImages.php');
+          if (response.ok) {
+              const imagesData = await response.json();
+              return imagesData;
             } else {
-                const imagesData = await response.json();
-                this.view.renderStoredImages(imagesData);
-            }
-        });
-    }
+              location.reload();
+          }
+      }
 
-    getAddInputData(addFormElement, labelInput, urlInput) {
-        addFormElement.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const label = labelInput.value;
-            const url = urlInput.value;
-            let inputData = {label, url};
-            this.isInputEmpty(inputData);
-        });
+    async renderStoredImages(gallery) {
+            try {
+                const storedImagesData = await this.getStoredImages();
+                this.view.renderImages(storedImagesData, gallery);
+            } catch(error) {
+                location.reload();
+            }
     }
 
     isInputEmpty(inputData) {
         if (inputData.label.trim() === "" || inputData.url.trim() === "") {
-            this.view.renderError("Fill in all fields!");
+            return true;
         } else {
-            this.isUrlValid(inputData);
+            return false;
         }
     }
 
     isUrlValid(inputData) {
         const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-        if (!urlRegex.test(inputData.url)) {
-            this.view.renderError("Please enter a valid URL!");
+        if (urlRegex.test(inputData.url)) {
+            return true;
         } else {
-            this.sendDataToServer(inputData);
+            return false;
         }
     }
 
@@ -62,11 +52,34 @@ export class Controller {
             body: jsonData
         });
         const data = await response.json();
-        if (data.message) {
-            this.view.renderError(data.message);
-        } else {
-            this.view.renderAddedImage(data);
-            this.addPhotoForm.style.display = "none";
-        }
+        return data;
+    }
+
+    async addPhoto(addFormElement, labelInput, urlInput, gallery) {
+
+        addFormElement.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const label = labelInput.value;
+            const url = urlInput.value;
+            const inputData = {label, url};
+
+            if (this.isInputEmpty(inputData)) {
+                this.view.renderError("Please fill in all fields!");
+                return;
+            }
+    
+            if (this.isUrlValid(inputData.url)) {
+                this.view.renderError("Please enter a valid URL!");
+                return;
+            }
+    
+            const data = await this.sendDataToServer(inputData);
+            if (data.message) {
+                this.view.renderError(data.message);
+            } else {
+                this.view.renderAddedImage(data, gallery);
+                addFormElement.style.display = "none";
+            }
+        });
     }
 }

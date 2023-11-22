@@ -18,6 +18,6 @@ try {
     header('Content-Type: application/json');
     echo json_encode($imagesData);
 
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+} catch (PDOException) {
+    http_response_code(400);
 }

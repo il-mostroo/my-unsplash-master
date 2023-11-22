@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $imageData = getAddInputData();
 
     if (!$imageData) {
-        $response = ["message" => "Error uplading the image, please try again!"];
+        $response = ["message" => "Error uploading the image, please try again!"];
         echo json_encode($response);
         exit;
     }
