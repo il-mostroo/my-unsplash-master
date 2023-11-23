@@ -1,27 +1,52 @@
 <?php
 
-require_once "model.php";
+require_once 'addPhoto-model.php';
 
-header('Content-Type: application/json');
+class AddPhoto {
+    
+    public function getInputData() {
+        $imageData = json_decode(file_get_contents("php://input"), true);
+        return $imageData;
+    }
+    
+    public function isInputEmpty($imageData) {
+        if (empty($imageData["label"]) || empty($imageData["url"])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function isUrlValid($imageData) {
+        $bool = filter_var($imageData["url"], FILTER_VALIDATE_URL);
+        if ($bool) {
+            return true;
+        } else {
+            return false;
+        }
+    } 
+}
+
+$addPhoto = new AddPhoto();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $imageData = getAddInputData();
-
+    
+    header('Content-Type: application/json');
+    $imageData = $addPhoto->getInputData();
     if (!$imageData) {
         $response = ["message" => "Error uploading the image, please try again!"];
         echo json_encode($response);
         exit;
     }
 
-    if (isInputEmpty($imageData)) {
+    if ($addPhoto->isInputEmpty($imageData)) {
         http_response_code(400);
         $response = ["message" => "Please fill in all fields!"];
         echo json_encode($response);
         exit;
     } 
 
-    if (!isUrlValid($imageData)) {
+    if (!$addPhoto->isUrlValid($imageData)) {
         http_response_code(400);
         $response = ["message" => "Please enter a valid URL!"];
         echo json_encode($response);
@@ -29,7 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     
     try {
-        $bool = isImgAlreadyExists($imageData);
+
+        $model = new Model();
+        $bool = $model->isImgAlreadyExists($imageData);
         if ($bool) {
             http_response_code(400);
             $response = ["message" => "Image already exists!"];
@@ -44,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     try {
-        insertImageData($imageData);
+        $model->insertImageData($imageData);
     } catch (PDOException) {
         http_response_code(400);
         $response = ["message" => "Error uploading the image, please try again!"];
@@ -61,25 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo json_encode($response);
 }
 
-function getAddInputData() {
-    $imageData = json_decode(file_get_contents("php://input"), true);
-    return $imageData;
-}
 
-function isInputEmpty($imageData) {
-    if (empty($imageData["label"]) || empty($imageData["url"])) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
-function isUrlValid($imageData) {
-    $bool = filter_var($imageData["url"], FILTER_VALIDATE_URL);
-    if ($bool) {
-        return true;
-    } else {
-        return false;
-    }
-} 
 

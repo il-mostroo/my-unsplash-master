@@ -15,7 +15,6 @@ export class View {
 
     addEventListeners() {
         this.addPhotoButton.addEventListener("click", () => {
-            console.log(this)
             this.addPhotoForm.style.display = "flex";
         })
         

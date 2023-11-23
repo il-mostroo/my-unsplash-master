@@ -13,16 +13,16 @@ export class Controller {
               const imagesData = await response.json();
               return imagesData;
             } else {
-                location.reload();
+                //dont know what to do
           }
-      }
+    }
 
     async renderStoredImages(gallery) {
             try {
                 const storedImagesData = await this.getStoredImages();
                 this.view.renderImages(storedImagesData, gallery);
             } catch(error) {
-                location.reload();
+                //dont know what to do
             }
     }
 
@@ -46,7 +46,7 @@ export class Controller {
     async sendDataToServer(inputData) {
         const jsonData = JSON.stringify(inputData);
 
-        const response = await fetch("/my-unsplash-master/includes/controller.php", {
+        const response = await fetch("/my-unsplash-master/includes/addPhoto-controller.php", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: jsonData
@@ -152,7 +152,10 @@ export class Controller {
             if (filteredImages.length > 0) {
                 gallery.replaceChildren();
                 this.view.renderImages(filteredImages, gallery);
-            } else {
+            } else if (filteredImages.length === 0 && filter !== "") {
+                gallery.replaceChildren();
+            } 
+             else {
                 gallery.replaceChildren();
                 this.view.renderImages(allImages, gallery);
             }
